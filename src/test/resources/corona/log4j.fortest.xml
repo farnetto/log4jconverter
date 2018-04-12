@@ -18,7 +18,7 @@
 ##
 ##   Hinweise:
 ##     Die log4j Konfig fuer Eclipse / lokaler Tests befindet sich in der Datei log4j.xml.
-##     Die JBoss-Log4j Konfiguration wird ausgeliefert und befindet sich unter de.comdirect.common/release/corona/conf.
+##     Die JBoss-Log4j Konfiguration wird ausgeliefert und befindet sich unter de.farnetto.common/release/corona/conf.
 ##
 ##
 ####################################################################### -->
@@ -43,7 +43,7 @@
       <param name="Append" value="true"/>
       <param name="MaxFileSize" value="75MB"/>
       <param name="MaxBackupIndex" value="2"/>
-      <layout class="com.comdirect.util.logging.CDPatternLayout">
+      <layout class="com.farnetto.util.logging.CDPatternLayout">
          <param name="ConversionPattern" value="%G|%5p|%m (%x) [%c{3}]%n"/>
       </layout>
    </appender>
@@ -94,7 +94,7 @@
    <appender name="JMS" class="org.apache.log4j.RollingFileAppender">
       <param name="File" value="${project.build.directory}/logs/jms.class30.log"/>
       <param name="Append" value="true"/>
-      <layout class="com.comdirect.util.logging.CDPatternLayout">
+      <layout class="com.farnetto.util.logging.CDPatternLayout">
          <param name="ConversionPattern" value="%d{MMM dd HH:mm:ss} %m%n"/>
       </layout>
    </appender>
@@ -105,20 +105,20 @@
         ==================================================================== -->
 
    <!-- die FW wird allgemein auf INFO gesetzt, die Anwendung auf DEBUG -->
-   <logger name="de.comdirect">
+   <logger name="de.farnetto">
        <level value="INFO"/>
    </logger>
-   <logger name="de.comdirect.application">
+   <logger name="de.farnetto.application">
        <level value="INFO"/>
    </logger>
-   <logger name="de.comdirect.domain">
+   <logger name="de.farnetto.domain">
        <level value="INFO"/>
    </logger>
    <!-- useful for deciphering what's going on with the JmsMockSender tests -->
-   <logger name="de.comdirect.application.mt.brokerage.cowiasmock">
+   <logger name="de.farnetto.application.mt.brokerage.cowiasmock">
        <level value="DEBUG"/>
    </logger>
-   <logger name="de.comdirect.technology.mt.persistence">
+   <logger name="de.farnetto.technology.mt.persistence">
        <level value="INFO"/>
    </logger>
    <!-- startup category -->
@@ -148,7 +148,7 @@
      <level value="DEBUG"/>
    </logger>
    <!-- fuer Hibernate-Validation der ORM-Dateien (-Dvalidate_hibernate_schema=true) -->
-   <logger name="de.comdirect.technology.mt.persistence.OrmQueryDumper" additivity="false">
+   <logger name="de.farnetto.technology.mt.persistence.OrmQueryDumper" additivity="false">
        <level value="DEBUG"/>
        <appender-ref ref="DBQS"/>
    </logger>
