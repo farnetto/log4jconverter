@@ -26,7 +26,7 @@ import freemarker.template.TemplateException;
 import freemarker.template.Version;
 
 /**
- * Converts log4j 1.2 xml in log4j2 (schema-free) xml configuration.
+ * Converts log4j 1.2 xml configuration to concise (schemaless) log4j2 xml.
  */
 public class Converter
 {
