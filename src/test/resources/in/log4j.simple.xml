@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+   <appender name="APPLICATION" class="org.apache.log4j.RollingFileAppender">
+      <param name="File" value="application.log"/>
+      <param name="Append" value="true"/>
+      <param name="MaxFileSize" value="75MB"/>
+      <param name="MaxBackupIndex" value="2"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%5p [%t] (%F:%L) - %m%n"/>
+      </layout>
+   </appender>
+
+   <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%p %t %c - %m%n"/>
+      </layout>
+   </appender>
+
+   <logger name="farnetto.log4jconverter" additivity="false">
+      <level value="DEBUG"/>
+      <appender-ref ref="APPLICATION" />
+   </logger>
+   
+   <logger name="farnetto">
+      <level value="WARN"/>
+   </logger>
+
+   <root>
+      <level value="INFO"/>
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="APPLICATION"/>
+   </root>
+   
+</log4j:configuration>

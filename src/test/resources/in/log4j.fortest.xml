@@ -2,58 +2,34 @@
 <!--
 ############################################################################
 ##
+##   This is a relatively complicated log4j 1.2 configuration.
 ##
-##   @(#) Version : [$CommitID$]
-##   @(#) Pfad    : [$Source$]
-##
-############################################################################
-##
-##
-##
-##   ****
-##   **** Dies ist die log4j Konfigurationsdatei fuer die Test-Ausfuehrung in Jenkins.
-##   ****
-##
-##   Es wird aktiviert mittels -Dlog4j.configuration=log4j.fortest.xml (siehe toplevel pom, surefire-Parameter).
-##
-##   Hinweise:
-##     Die log4j Konfig fuer Eclipse / lokaler Tests befindet sich in der Datei log4j.xml.
-##     Die JBoss-Log4j Konfiguration wird ausgeliefert und befindet sich unter de.farnetto.common/release/corona/conf.
-##
-##
-####################################################################### -->
+############################################################################ -->
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
    <!-- =====================================================================
 
-        Log4j-Konfiguration
-
-        Dieser Konfigurationsdatei wird benutzt fuer Tests im Daily-Build (Jenkins).
+        This is the configuration for the daily build.
 
         ==================================================================== -->
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
 
    <!-- ====================================================================
-        Anwendungs-Logdatei fuer corona.
-        Default fuer alle Meldungen, die nicht explizit woanders geroutet werden.
+        application log
         ==================================================================== -->
    <appender name="APPL" class="org.apache.log4j.RollingFileAppender">
-      <param name="File" value="${project.build.directory}/logs/appl.class30.log"/>
+      <param name="File" value="${project.build.directory}/logs/appl.log"/>
       <param name="Append" value="true"/>
       <param name="MaxFileSize" value="75MB"/>
       <param name="MaxBackupIndex" value="2"/>
-      <layout class="com.farnetto.util.logging.CDPatternLayout">
+      <layout class="farnetto.logging.FarnettoPatternLayout">
          <param name="ConversionPattern" value="%G|%5p|%m (%x) [%c{3}]%n"/>
       </layout>
    </appender>
 
    <!-- ====================================================================
-        Console-Logger.
-        Alle Meldungen werden hierher geroutet.
-
-        In Jenkins werden die Logmeldungen vom Test angezeigt, wenn die Meldungen auf stdout erscheinen.
-        Daher wird hier alles auf der Console ausgegeben.
+        console log
         ==================================================================== -->
    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
       <layout class="org.apache.log4j.EnhancedPatternLayout">
@@ -62,12 +38,10 @@
    </appender>
 
    <!-- ====================================================================
-        DBQS-Logdatei.
-        Wird im Daily-Build benutzt um die Hibernate-queries zu protokollieren.
-        -Dvalidate_hibernate_schema=true
+        Hibernate log
         ==================================================================== -->
-   <appender name="DBQS" class="org.apache.log4j.FileAppender">
-      <param name="File" value="${project.build.directory}/logs/dbqs.class30.log"/>
+   <appender name="HIBERNATE" class="org.apache.log4j.FileAppender">
+      <param name="File" value="${project.build.directory}/logs/hibernate.log"/>
       <param name="Append" value="false"/>
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%m%n"/>
@@ -75,11 +49,10 @@
    </appender>
 
    <!-- ====================================================================
-        corona Spring-XML-Logdatei.
-        Fuer die JUnit-Tests nicht relevant, daher Threshold=OFF.
+        Spring log
         ==================================================================== -->
    <appender name="SPRING-XML-APPENDER" class="org.apache.log4j.RollingFileAppender">
-      <param name="File" value="${project.build.directory}/logs/spring.class30.log"/>
+      <param name="File" value="${project.build.directory}/logs/spring.log"/>
       <param name="Append" value="false"/>
       <param name="Threshold" value="OFF"/>
       <layout class="org.apache.log4j.PatternLayout">
@@ -88,37 +61,35 @@
    </appender>
    
    <!-- ====================================================================
-        corona JMS-Nachrichten-Logdatei.
-        JMS-Nachrichten werden hierher geloggt.
+        JMS log
         ==================================================================== -->
    <appender name="JMS" class="org.apache.log4j.RollingFileAppender">
-      <param name="File" value="${project.build.directory}/logs/jms.class30.log"/>
+      <param name="File" value="${project.build.directory}/logs/jms.log"/>
       <param name="Append" value="true"/>
-      <layout class="com.farnetto.util.logging.CDPatternLayout">
+      <layout class="com.farnetto.logging.FarnettoPatternLayout">
          <param name="ConversionPattern" value="%d{MMM dd HH:mm:ss} %m%n"/>
       </layout>
    </appender>
 
    <!-- ====================================================================
-        Logger-Definitionen.
-        Setze die "level" hoeher, um wenige Logging zu haben.
+        logger definitions
         ==================================================================== -->
 
    <!-- die FW wird allgemein auf INFO gesetzt, die Anwendung auf DEBUG -->
-   <logger name="de.farnetto">
+   <logger name="farnetto">
        <level value="INFO"/>
    </logger>
-   <logger name="de.farnetto.application">
+   <logger name="farnetto.application">
        <level value="INFO"/>
    </logger>
-   <logger name="de.farnetto.domain">
+   <logger name="farnetto.domain">
        <level value="INFO"/>
    </logger>
    <!-- useful for deciphering what's going on with the JmsMockSender tests -->
-   <logger name="de.farnetto.application.mt.brokerage.cowiasmock">
+   <logger name="farnetto.application.mt.brokerage.cowiasmock">
        <level value="DEBUG"/>
    </logger>
-   <logger name="de.farnetto.technology.mt.persistence">
+   <logger name="farnetto.technology.mt.persistence">
        <level value="INFO"/>
    </logger>
    <!-- startup category -->
@@ -127,7 +98,7 @@
    </logger>
 
    <!-- ====================================================================
-        MDG-Logging (Dies ist getrennt von MDG-Log).
+        MDG logging (Dies ist getrennt von MDG-Log).
         ==================================================================== -->
    <logger name="com.mdgms">
       <level value="WARN"/>
@@ -148,7 +119,7 @@
      <level value="DEBUG"/>
    </logger>
    <!-- fuer Hibernate-Validation der ORM-Dateien (-Dvalidate_hibernate_schema=true) -->
-   <logger name="de.farnetto.technology.mt.persistence.OrmQueryDumper" additivity="false">
+   <logger name="farnetto.technology.mt.persistence.OrmQueryDumper" additivity="false">
        <level value="DEBUG"/>
        <appender-ref ref="DBQS"/>
    </logger>
@@ -179,16 +150,15 @@
    </logger>
 
    <!-- ====================================================================
-        Spring-XML-Logging.
-        **** Der Level sollte immer auf TRACE stehen. ****
+        Spring XML logging
         ==================================================================== -->
    <logger name="SPRING-XML" additivity="false">
-      <level value="TRACE"/> <!--  nicht aendern! -->
+      <level value="TRACE"/>
       <appender-ref ref="SPRING-XML-APPENDER" />
    </logger>
 
    <!-- ====================================================================
-        STDOUT, STDERR werden in die APPL-Logs geroutet.
+        STDOUT, STDERR get sent to application log
         ==================================================================== -->
    <logger name="STDOUT" additivity="false">
       <appender-ref ref="APPL"/>
@@ -200,7 +170,7 @@
    </logger>
 
    <!-- ====================================================================
-        JMS-Logging.
+        JMS logging
         ==================================================================== -->
    <logger name="JMS-LOGGER" additivity="false">
       <level value="INFO"/>
@@ -208,7 +178,7 @@
    </logger>
    
    <!-- ====================================================================
-        FIXENGINE-Logging.
+        FIXENGINE logging.
         ==================================================================== -->
    <logger name="FIXENGINE-LOGGER" additivity="false">
       <level value="INFO"/>
@@ -216,8 +186,7 @@
    </logger>
 
    <!-- ====================================================================
-        Konfiguration der Root-Logger.
-        Per Default gehen Meldungen ans CONSOLE und der Applikations-Log.
+        configuration for root logger
         ==================================================================== -->
    <root>
       <level value="WARN"/>

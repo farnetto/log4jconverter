@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+
+    <Appenders>
+    
+        <RollingFile name="APPLICATION">
+        </RollingFile>
+        
+        <Console name="CONSOLE" target="STDOUT">
+        </Console>
+        
+    </Appenders>
+    
+    <Loggers>
+        <Logger name="farnetto.log4jconverter" level="DEBUG" additivity="false">
+            <AppenderRef ref="APPLICATION"/>
+        </Logger>
+        
+        <Logger name="farnetto" level="WARN">
+        </Logger>
+        
+        <Root level="root.level">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="APPLICATION"/>
+        </Root>      
+    
+    </Loggers>
+    
+</Configuration>

@@ -11,11 +11,19 @@
     <url>http://maven.apache.org</url>
 
     <properties>
+        <jdkLevel>1.8</jdkLevel>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <target>${jdkLevel}</target>
+                    <source>${jdkLevel}</source>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
@@ -29,10 +37,10 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <packageName>org.apache.log4j.xml</packageName>
+                    <packageName>farnetto.log4jconverter.jaxb</packageName>
                     <sourceType>dtd</sourceType>
                     <sources>
-                        <source>src/main/resources</source>
+                        <source>src/main/resources/farnetto/log4jconverter/dtd</source>
                     </sources>
                 </configuration>
             </plugin>
@@ -52,11 +60,44 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.28</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>farnetto-common-unverified</id>
+            <url>https://cdnxsd01/nexus/content/groups/common-unverified/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>farnetto-common-unverified</id>
+            <url>https://cdnxsd01/nexus/content/groups/common-unverified/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
