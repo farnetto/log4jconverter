@@ -1,5 +1,8 @@
 package farnetto.log4jconverter;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -31,6 +34,11 @@ import freemarker.template.Version;
 public class Converter
 {
     private static final String FREEMARKER_VERSION = "2.3.28";
+
+    public static void main(String[] args) throws FileNotFoundException
+    {
+        new Converter().convert(new FileInputStream(new File(args[0])), System.out);
+    }
 
     /**
      * @param log4jInput
@@ -72,11 +80,10 @@ public class Converter
 
         Configuration cfg = new Configuration(new Version(FREEMARKER_VERSION));
         cfg.setClassForTemplateLoading(getClass(), "template");
-        try
+        try (Writer log4j2OutputWriter = new OutputStreamWriter(log4j2Output))
         {
             Template template = cfg.getTemplate("log4j2.ftl");
-            Writer consoleWriter = new OutputStreamWriter(log4j2Output);
-            template.process(input, consoleWriter);
+            template.process(input, log4j2OutputWriter);
         }
         catch (IOException | TemplateException e)
         {

@@ -58,7 +58,15 @@ public class ConverterTest
      */
     private void convertAndCompare(String xmlFileSuffix)
     {
-        File f = new File("target/test-out/log4j2." + xmlFileSuffix);
+        File outDir = new File("target/test-out");
+        if (!outDir.exists())
+        {
+            if (!outDir.mkdirs())
+            {
+                fail("Could not create output directory: " + outDir);
+            }
+        }
+        File f = new File(outDir, "log4j2." + xmlFileSuffix);
         if (f.exists())
         {
             if (!f.delete())
@@ -80,7 +88,7 @@ public class ConverterTest
         try
         {
             Path expectedOut = Paths.get(getClass().getResource(expectedOutputFileName).toURI());
-            Path actualOut = Paths.get("target/test-out", "log4j2." + xmlFileSuffix);
+            Path actualOut = outDir.toPath().resolve("log4j2." + xmlFileSuffix);
             List<String> expectedOutLines = Files.readAllLines(expectedOut, StandardCharsets.UTF_8);
             List<String> actualOutLines = Files.readAllLines(actualOut, StandardCharsets.UTF_8);
             assertEquals(expectedOutLines.size(), actualOutLines.size());
