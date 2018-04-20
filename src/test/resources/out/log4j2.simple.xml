@@ -3,6 +3,9 @@
 
     <Appenders>
     
+        <!-- ====================================================================
+             application log
+             ==================================================================== -->
         <RollingFile name="APPLICATION">
             <PatternLayout pattern="%5p [%t] (%F:%L) - %m%n"/>
             <Policies>

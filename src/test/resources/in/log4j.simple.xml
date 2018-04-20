@@ -2,6 +2,9 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
 
+   <!-- ====================================================================
+        application log
+        ==================================================================== -->
    <appender name="APPLICATION" class="org.apache.log4j.RollingFileAppender">
       <param name="File" value="application.log"/>
       <param name="Append" value="true"/>

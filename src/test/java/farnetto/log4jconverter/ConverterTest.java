@@ -91,7 +91,6 @@ public class ConverterTest
             Path actualOut = outDir.toPath().resolve("log4j2." + xmlFileSuffix);
             List<String> expectedOutLines = Files.readAllLines(expectedOut, StandardCharsets.UTF_8);
             List<String> actualOutLines = Files.readAllLines(actualOut, StandardCharsets.UTF_8);
-            assertEquals(expectedOutLines.size(), actualOutLines.size());
             int idx = 0;
             for (String expectedLine : expectedOutLines)
             {
@@ -120,6 +119,13 @@ public class ConverterTest
 
     private void convert(String file, OutputStream out)
     {
-        new Converter().convert(getClass().getResourceAsStream(file), out);
+        try
+        {
+            new Converter().convert(new File(getClass().getResource(file).toURI()), out);
+        }
+        catch (URISyntaxException e)
+        {
+            fail(e.toString());
+        }
     }
 }

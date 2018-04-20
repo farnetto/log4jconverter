@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -16,7 +15,12 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamSource;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -37,14 +41,14 @@ public class Converter
 
     public static void main(String[] args) throws FileNotFoundException
     {
-        new Converter().convert(new FileInputStream(new File(args[0])), System.out);
+        new Converter().convert(new File(args[0]), System.out);
     }
 
     /**
      * @param log4jInput
      * @param log4j2Output
      */
-    public void convert(InputStream log4jInput, OutputStream log4j2Output)
+    public void convert(File log4jInput, OutputStream log4j2Output)
     {
         if (log4jInput == null)
         {
@@ -62,12 +66,23 @@ public class Converter
 
             XMLReader xmlReader = spf.newSAXParser().getXMLReader();
 
-            InputSource inputSource = new InputSource(log4jInput);
+            InputSource inputSource = new InputSource(new FileInputStream(log4jInput));
             SAXSource source = new SAXSource(xmlReader, inputSource);
 
             log4jConfig = (Log4JConfiguration) unmarshaller.unmarshal(source);
+
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XMLStreamReader xsr = factory.createXMLStreamReader(new StreamSource(log4jInput));
+            while (xsr.hasNext())
+            {
+                if (xsr.getEventType() == XMLStreamConstants.COMMENT)
+                {
+                    System.out.println(xsr.getText());
+                }
+                xsr.next();
+            }
         }
-        catch (JAXBException | ParserConfigurationException | SAXException e)
+        catch (JAXBException | ParserConfigurationException | SAXException | XMLStreamException | FileNotFoundException e)
         {
             throw new ConverterException("Cannot initialize Unmarshaller", e);
         }
