@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+############################################################################
+##
+##  This is the log configuration for production.
+##
+############################################################################
+-->
 <Configuration status="warn">
 
     <Appenders>

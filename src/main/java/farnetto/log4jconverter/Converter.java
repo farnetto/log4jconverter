@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
@@ -15,12 +18,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamSource;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -55,6 +53,30 @@ public class Converter
             throw new NullPointerException("xmlInput must not be null");
         }
 
+        try
+        {
+            List<String> lines = Files.readAllLines(Paths.get(log4jInput.toURI()));
+            boolean comment = false;
+            for (int i = 0; i < lines.size(); i++)
+            {
+                String line = lines.get(i);
+                if (comment || line.contains("<!--"))
+                {
+                    System.out.println(line);
+                    comment = true;
+                }
+                if (comment && line.contains("-->"))
+                {
+                    System.out.println(line);
+                    comment = false;
+                }
+            }
+        }
+        catch (IOException e1)
+        {
+            throw new ConverterException("Can not process file " + log4jInput, e1);
+        }
+
         Log4JConfiguration log4jConfig = null;
         try
         {
@@ -70,21 +92,10 @@ public class Converter
             SAXSource source = new SAXSource(xmlReader, inputSource);
 
             log4jConfig = (Log4JConfiguration) unmarshaller.unmarshal(source);
-
-            XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader xsr = factory.createXMLStreamReader(new StreamSource(log4jInput));
-            while (xsr.hasNext())
-            {
-                if (xsr.getEventType() == XMLStreamConstants.COMMENT)
-                {
-                    System.out.println(xsr.getText());
-                }
-                xsr.next();
-            }
         }
-        catch (JAXBException | ParserConfigurationException | SAXException | XMLStreamException | FileNotFoundException e)
+        catch (JAXBException | ParserConfigurationException | SAXException | FileNotFoundException e)
         {
-            throw new ConverterException("Cannot initialize Unmarshaller", e);
+            throw new ConverterException("Can not initialize Unmarshaller", e);
         }
 
         Map<String,Object> input = new HashMap<String,Object>();
