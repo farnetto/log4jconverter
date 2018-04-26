@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -84,23 +85,32 @@ public class ConverterTest
             fail("could not create file " + f + ", exception: " + e);
         }
 
+        // compare ignoring blank lines
         String expectedOutputFileName = "/out/log4j2." + xmlFileSuffix;
         try
         {
             Path expectedOut = Paths.get(getClass().getResource(expectedOutputFileName).toURI());
             Path actualOut = outDir.toPath().resolve("log4j2." + xmlFileSuffix);
-            List<String> expectedOutLines = Files.readAllLines(expectedOut, StandardCharsets.UTF_8);
-            List<String> actualOutLines = Files.readAllLines(actualOut, StandardCharsets.UTF_8);
+            List<String> expectedOutLines = removeBlanks(Files.readAllLines(expectedOut, StandardCharsets.UTF_8));
+            List<String> actualOutLines = removeBlanks(Files.readAllLines(actualOut, StandardCharsets.UTF_8));
             int idx = 0;
             for (String expectedLine : expectedOutLines)
             {
-                assertEquals(expectedLine, actualOutLines.get(idx++));
+                assertEquals(expectedLine.trim(), actualOutLines.get(idx++).trim());
             }
         }
         catch (URISyntaxException | IOException e)
         {
             fail("could not read file " + e);
         }
+    }
+
+    /**
+     * remove empty lines
+     */
+    private List<String> removeBlanks(List<String> readAllLines)
+    {
+        return readAllLines.stream().filter(s -> s.trim().isEmpty()).collect(Collectors.toList());
     }
 
     @Test(expected = NullPointerException.class)

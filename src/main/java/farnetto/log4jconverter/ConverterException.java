@@ -16,4 +16,14 @@ public class ConverterException extends RuntimeException
         super(message, cause);
     }
 
+    /**
+     * Konstruktor
+     * 
+     * @param message
+     */
+    public ConverterException(String message)
+    {
+        super(message);
+    }
+
 }

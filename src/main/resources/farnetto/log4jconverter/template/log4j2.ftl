@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="${statusLevel}">
+${comments.log4jconfiguration}<Configuration status="${statusLevel}">
 
     <Appenders>
     
       <#list appenders as appender>
+        ${comments[appender.name]!}
         <#if appender.clazz == "org.apache.log4j.RollingFileAppender">
         <RollingFile name="${appender.name}">
             <PatternLayout pattern="${appender.layout.param?first.value}"/>
@@ -24,6 +25,7 @@
     
     <Loggers>
       <#list loggers as logger>
+        ${comments[logger.name]!}
         <Logger name="${logger.name}"<#if logger.level??> level="${logger.level.value}"</#if><#if !logger.additivity?boolean> additivity="${logger.additivity}"</#if>>
           <#if (logger.appenderRef?size > 0)>
             <#list logger.appenderRef as appender>
@@ -33,6 +35,7 @@
         </Logger>
         
       </#list>
+        ${comments.root!}
         <Root level="root.level">
           <#list root.appenderRef as appender>
             <AppenderRef ref="${appender.ref}"/>

@@ -12,6 +12,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -37,6 +39,12 @@ public class Converter
 {
     private static final String FREEMARKER_VERSION = "2.3.28";
 
+    private static final String EOL = System.getProperty("line.separator");
+
+    private static final String CONFIG_TAG = "log4j:configuration";
+
+    private static final Pattern NAME_PATTERN = Pattern.compile("name=[\"'](.*?)[\"']");
+
     public static void main(String[] args) throws FileNotFoundException
     {
         new Converter().convert(new File(args[0]), System.out);
@@ -50,33 +58,22 @@ public class Converter
     {
         if (log4jInput == null)
         {
-            throw new NullPointerException("xmlInput must not be null");
+            throw new NullPointerException("input must not be null");
         }
 
-        try
-        {
-            List<String> lines = Files.readAllLines(Paths.get(log4jInput.toURI()));
-            boolean comment = false;
-            for (int i = 0; i < lines.size(); i++)
-            {
-                String line = lines.get(i);
-                if (comment || line.contains("<!--"))
-                {
-                    System.out.println(line);
-                    comment = true;
-                }
-                if (comment && line.contains("-->"))
-                {
-                    System.out.println(line);
-                    comment = false;
-                }
-            }
-        }
-        catch (IOException e1)
-        {
-            throw new ConverterException("Can not process file " + log4jInput, e1);
-        }
+        Map<String,String> comments = parseComments(log4jInput);
 
+        System.out.println(comments);
+
+        parseXml(log4jInput, log4j2Output, comments);
+    }
+
+    /**
+     * @param log4jInput
+     * @param log4j2Output
+     */
+    private void parseXml(File log4jInput, OutputStream log4j2Output, Map<String,String> comments)
+    {
         Log4JConfiguration log4jConfig = null;
         try
         {
@@ -103,6 +100,7 @@ public class Converter
         input.put("appenders", log4jConfig.getAppender());
         input.put("loggers", log4jConfig.getCategoryOrLogger());
         input.put("root", log4jConfig.getRoot());
+        input.put("comments", comments);
 
         Configuration cfg = new Configuration(new Version(FREEMARKER_VERSION));
         cfg.setClassForTemplateLoading(getClass(), "template");
@@ -115,5 +113,76 @@ public class Converter
         {
             throw new ConverterException("Cannot process template", e);
         }
+    }
+
+    /**
+     * @param log4jInput
+     * @return
+     */
+    private Map<String,String> parseComments(File log4jInput)
+    {
+        Map<String,String> comments = new HashMap<>();
+
+        try
+        {
+            List<String> lines = Files.readAllLines(Paths.get(log4jInput.toURI()));
+            boolean comment = false;
+            boolean endOfComment = false;
+            StringBuilder aComment = new StringBuilder();
+            for (int i = 0; i < lines.size(); i++)
+            {
+                String line = lines.get(i);
+
+                if (line.contains("<!--"))
+                {
+                    aComment.append(line.trim()).append(EOL);
+                    comment = true;
+                }
+                else if (line.contains("-->"))
+                {
+                    aComment.append(line).append(EOL);
+                    comment = false;
+                    // process end of comment
+                    for (i++; i < lines.size(); i++)
+                    {
+                        line = lines.get(i);
+                        if (line.contains("name=") || line.contains(CONFIG_TAG))
+                        {
+                            String key = parseName(line);
+                            comments.put(key, aComment.toString());
+                            aComment.setLength(0);
+                            break;
+                        }
+                    }
+                }
+                else if (comment)
+                {
+                    aComment.append(line).append(EOL);
+                }
+            }
+        }
+        catch (IOException e1)
+        {
+            throw new ConverterException("Can not process file " + log4jInput, e1);
+        }
+        return comments;
+    }
+
+    /**
+     * @param line
+     * @return
+     */
+    private String parseName(String line)
+    {
+        if (line.contains(CONFIG_TAG))
+        {
+            return "log4jconfiguration";
+        }
+        Matcher m = NAME_PATTERN.matcher(line);
+        if (m.find())
+        {
+            return m.group(1);
+        }
+        throw new ConverterException("can not find attribute name in line: " + line);
     }
 }
