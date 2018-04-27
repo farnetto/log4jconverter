@@ -6,18 +6,39 @@ ${comments.log4jconfiguration}
     
       <#list appenders as appender>
         ${comments[appender.name]!}
+        <#list appender.param as param>
+          <#if param.name == "File">
+            <#assign fileName=param.value>
+          </#if>
+          <#if param.name == "MaxFileSize">
+            <#assign maxFileSize=param.value>
+          </#if>
+          <#if param.name == "MaxBackupIndex">
+            <#assign maxBackupIndex=param.value>
+          </#if>
+          <#if param.name == "Append">
+            <#assign append=param.value>
+          </#if>
+        </#list>
         <#if appender.clazz == "org.apache.log4j.RollingFileAppender">
-        <RollingFile name="${appender.name}">
+        <RollingFile name="${appender.name}" fileName="${fileName}">
             <PatternLayout pattern="${appender.layout.param?first.value}"/>
             <Policies>
-                <SizeBasedTriggeringPolicy size="30 MB"/>
+                <SizeBasedTriggeringPolicy size="${maxFileSize}"/>
             </Policies>
-            <DefaultRolloverStrategy max="2"/>
+            <DefaultRolloverStrategy max="${maxBackupIndex}"/>
         </RollingFile>
+        
+        </#if>
+        <#if appender.clazz == "org.apache.log4j.FileAppender">
+        <File name="${appender.name}" fileName="${fileName}" append="${append}">
+            <PatternLayout pattern="${appender.layout.param?first.value}"/>
+        </File>
         
         </#if>
         <#if appender.clazz == "org.apache.log4j.ConsoleAppender">
         <Console name="${appender.name}" target="STDOUT">
+            <PatternLayout pattern="${appender.layout.param?first.value}"/>
         </Console>
         
         </#if>

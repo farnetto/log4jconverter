@@ -13,18 +13,23 @@
         <!-- ====================================================================
              application log
              ==================================================================== -->
-        <RollingFile name="APPLICATION">
+        <RollingFile name="APPLICATION" fileName="logs/app.log">
             <PatternLayout pattern="%5p [%t] (%F:%L) - %m%n"/>
             <Policies>
-                <SizeBasedTriggeringPolicy size="30 MB"/>
+                <SizeBasedTriggeringPolicy size="75MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="2"/>
+            <DefaultRolloverStrategy max="3"/>
         </RollingFile>
+        
+        <File name="FOO" fileName="logs/foo.log" append="false">
+            <PatternLayout pattern="%m%n"/>
+        </File>
         
         <!-- ====================================================================
              console log
              ==================================================================== -->
         <Console name="CONSOLE" target="STDOUT">
+            <PatternLayout pattern="%p %t %c - %m%n"/>
         </Console>
         
     </Appenders>

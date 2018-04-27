@@ -13,12 +13,20 @@
         application log
         ==================================================================== -->
    <appender name="APPLICATION" class="org.apache.log4j.RollingFileAppender">
-      <param name="File" value="application.log"/>
+      <param name="File" value="logs/app.log"/>
       <param name="Append" value="true"/>
       <param name="MaxFileSize" value="75MB"/>
-      <param name="MaxBackupIndex" value="2"/>
+      <param name="MaxBackupIndex" value="3"/>
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%5p [%t] (%F:%L) - %m%n"/>
+      </layout>
+   </appender>
+   
+   <appender name="FOO" class="org.apache.log4j.FileAppender">
+      <param name="File" value="logs/foo.log"/>
+      <param name="Append" value="false"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%m%n"/>
       </layout>
    </appender>
 
