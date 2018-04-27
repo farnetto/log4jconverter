@@ -7,7 +7,7 @@
 ##
 ############################################################################
 -->
-<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="true">
 
    <!-- ====================================================================
         application log
@@ -22,21 +22,29 @@
       </layout>
    </appender>
 
+   <!-- ====================================================================
+        console log
+        ==================================================================== -->
    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
       <layout class="org.apache.log4j.PatternLayout">
          <param name="ConversionPattern" value="%p %t %c - %m%n"/>
       </layout>
    </appender>
 
+   <!-- this is the logger for the converter package -->
    <logger name="farnetto.log4jconverter" additivity="false">
       <level value="DEBUG"/>
       <appender-ref ref="APPLICATION" />
    </logger>
    
+   <!-- this is another oneline comment -->
    <logger name="farnetto">
       <level value="WARN"/>
    </logger>
 
+   <!-- ====================================================================
+        This is the root logger.
+        ==================================================================== -->
    <root>
       <level value="INFO"/>
       <appender-ref ref="CONSOLE"/>

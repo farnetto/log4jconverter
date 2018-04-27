@@ -93,10 +93,11 @@ public class ConverterTest
             Path actualOut = outDir.toPath().resolve("log4j2." + xmlFileSuffix);
             List<String> expectedOutLines = removeBlanks(Files.readAllLines(expectedOut, StandardCharsets.UTF_8));
             List<String> actualOutLines = removeBlanks(Files.readAllLines(actualOut, StandardCharsets.UTF_8));
-            int idx = 0;
-            for (String expectedLine : expectedOutLines)
+            for (int idx = 0; idx < expectedOutLines.size(); idx++)
             {
-                assertEquals(expectedLine.trim(), actualOutLines.get(idx++).trim());
+                String expectedLine = expectedOutLines.get(idx).trim();
+                String actualLine = actualOutLines.get(idx).trim();
+                assertEquals("at line " + idx, expectedLine, actualLine);
             }
         }
         catch (URISyntaxException | IOException e)
@@ -110,7 +111,7 @@ public class ConverterTest
      */
     private List<String> removeBlanks(List<String> readAllLines)
     {
-        return readAllLines.stream().filter(s -> s.trim().isEmpty()).collect(Collectors.toList());
+        return readAllLines.stream().filter(s -> !s.trim().isEmpty()).collect(Collectors.toList());
     }
 
     @Test(expected = NullPointerException.class)

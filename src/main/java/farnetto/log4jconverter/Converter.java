@@ -96,7 +96,7 @@ public class Converter
         }
 
         Map<String,Object> input = new HashMap<String,Object>();
-        input.put("statusLevel", "warn");
+        input.put("statusLevel", Boolean.valueOf(log4jConfig.getDebug()) ? "debug" : "warn");
         input.put("appenders", log4jConfig.getAppender());
         input.put("loggers", log4jConfig.getCategoryOrLogger());
         input.put("root", log4jConfig.getRoot());
@@ -127,13 +127,12 @@ public class Converter
         {
             List<String> lines = Files.readAllLines(Paths.get(log4jInput.toURI()));
             boolean comment = false;
-            boolean endOfComment = false;
             StringBuilder aComment = new StringBuilder();
             for (int i = 0; i < lines.size(); i++)
             {
                 String line = lines.get(i);
 
-                if (line.contains("<!--"))
+                if (line.contains("<!--") && !line.contains("-->"))
                 {
                     aComment.append(line.trim()).append(EOL);
                     comment = true;
@@ -146,7 +145,7 @@ public class Converter
                     for (i++; i < lines.size(); i++)
                     {
                         line = lines.get(i);
-                        if (line.contains("name=") || line.contains(CONFIG_TAG))
+                        if (line.contains("name=") || line.contains(CONFIG_TAG) || line.contains("root"))
                         {
                             String key = parseName(line);
                             comments.put(key, aComment.toString());
@@ -174,6 +173,10 @@ public class Converter
      */
     private String parseName(String line)
     {
+        if (line.contains("root"))
+        {
+            return "root";
+        }
         if (line.contains(CONFIG_TAG))
         {
             return "log4jconfiguration";
