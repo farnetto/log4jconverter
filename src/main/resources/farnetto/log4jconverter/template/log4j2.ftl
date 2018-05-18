@@ -48,13 +48,13 @@ ${comments.log4jconfiguration}
     <Loggers>
       <#list loggers as logger>
         ${comments[logger.name]!}
-        <Logger name="${logger.name}"<#if logger.level??> level="${logger.level.value}"</#if><#if !logger.additivity?boolean> additivity="${logger.additivity}"</#if>>
+        <Logger name="${logger.name}"<#if logger.level??> level="${logger.level.value}"</#if><#if !logger.additivity?boolean> additivity="${logger.additivity}"</#if><#if (logger.appenderRef?size == 0)>/</#if>>
           <#if (logger.appenderRef?size > 0)>
             <#list logger.appenderRef as appender>
             <AppenderRef ref="${appender.ref}"/>
             </#list>
-          </#if>
         </Logger>
+          </#if>
         
       </#list>
         ${comments.root!}

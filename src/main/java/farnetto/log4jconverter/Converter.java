@@ -149,7 +149,7 @@ public class Converter
                     if (!hasTag(line))
                     {
                         // includes oneline comments
-                        aComment.append(line).append(EOL);
+                        aComment.append(line);
                         comment = false;
                         // process end of comment - look for following component definition and add to comments map
                         for (i++; i < lines.size(); i++)

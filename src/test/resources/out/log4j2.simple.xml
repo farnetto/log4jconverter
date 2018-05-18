@@ -42,8 +42,7 @@
         </Logger>
         
         <!-- this is another oneline comment -->
-        <Logger name="farnetto" level="WARN">
-        </Logger>
+        <Logger name="farnetto" level="WARN"/>
         
         <!-- ====================================================================
              This is the root logger.
