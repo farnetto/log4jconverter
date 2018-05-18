@@ -49,6 +49,8 @@ public class Converter
 
     private static final Pattern NAME_PATTERN = Pattern.compile("name=[\"'](.*?)[\"']");
 
+    private static final Pattern START_TAG_PATTERN = Pattern.compile("<[a-zA-Z]");
+
     public static void main(String[] args) throws FileNotFoundException
     {
         new Converter().convert(new File(args[0]), System.out);
@@ -136,25 +138,30 @@ public class Converter
             {
                 String line = lines.get(i);
 
-                if (line.contains("<!--") && !line.contains("-->"))
+                if (line.trim().startsWith("<!--") && !line.contains("-->"))
                 {
                     aComment.append(line.trim()).append(EOL);
                     comment = true;
                 }
                 else if (line.contains("-->"))
                 {
-                    aComment.append(line).append(EOL);
-                    comment = false;
-                    // process end of comment
-                    for (i++; i < lines.size(); i++)
+                    // skip embedded comments
+                    if (!hasTag(line))
                     {
-                        line = lines.get(i);
-                        if (line.contains("name=") || line.contains(CONFIG_TAG) || line.contains("root"))
+                        // includes oneline comments
+                        aComment.append(line).append(EOL);
+                        comment = false;
+                        // process end of comment - look for following component definition and add to comments map
+                        for (i++; i < lines.size(); i++)
                         {
-                            String key = parseName(line);
-                            comments.put(key, aComment.toString());
-                            aComment.setLength(0);
-                            break;
+                            line = lines.get(i);
+                            if (line.contains("name=") || line.contains(CONFIG_TAG) || line.contains("root"))
+                            {
+                                String key = parseName(line);
+                                comments.put(key, aComment.toString());
+                                aComment.setLength(0);
+                                break;
+                            }
                         }
                     }
                 }
@@ -169,6 +176,11 @@ public class Converter
             throw new ConverterException("Can not process file " + log4jInput, e1);
         }
         return comments;
+    }
+
+    private boolean hasTag(String line)
+    {
+        return START_TAG_PATTERN.matcher(line).find();
     }
 
     /**

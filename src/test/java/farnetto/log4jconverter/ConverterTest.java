@@ -54,6 +54,12 @@ public class ConverterTest
         convertAndCompare("simple.xml");
     }
 
+    @Test
+    public void embeddedComment()
+    {
+        convertAndCompare("embeddedComment.xml");
+    }
+
     /**
      * @param xmlFileSuffix
      */
