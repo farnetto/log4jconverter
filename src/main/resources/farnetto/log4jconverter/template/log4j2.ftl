@@ -33,6 +33,11 @@ ${comments.log4jconfiguration}
         <#if appender.clazz == "org.apache.log4j.FileAppender">
         <File name="${appender.name}" fileName="${fileName}" append="${append}">
             <PatternLayout pattern="${appender.layout.param?first.value}"/>
+            <#list appender.param as p>
+                <#if p.name == "Threshold">
+            <Filter type="ThresholdFilter" level="${p.value}"/>
+                </#if>
+            </#list>
         </File>
         
         </#if>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<!--
+############################################################################
+##
+##  This is the log configuration for production.
+##
+############################################################################
+-->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="true">
+
+   <!-- ====================================================================
+        application log
+        ==================================================================== -->
+   <appender name="APPLICATION" class="org.apache.log4j.RollingFileAppender">
+      <param name="File" value="logs/app.log"/>
+      <param name="Append" value="true"/>
+      <param name="MaxFileSize" value="75MB"/>
+      <param name="MaxBackupIndex" value="3"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%5p [%t] (%F:%L) - %m%n"/>
+      </layout>
+   </appender>
+   
+   <appender name="FOO" class="org.apache.log4j.FileAppender">
+      <param name="File" value="logs/foo.log"/>
+      <param name="Append" value="false"/>
+      <param name="Threshold" value="ERROR" />
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%m%n"/>
+      </layout>
+   </appender>
+
+   <!-- ====================================================================
+        console log
+        ==================================================================== -->
+   <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%p %t %c - %m%n"/>
+      </layout>
+   </appender>
+
+   <!-- this is the logger for the converter package -->
+   <logger name="farnetto.log4jconverter" additivity="false">
+      <level value="DEBUG"/>
+      <appender-ref ref="APPLICATION" />
+   </logger>
+   
+   <!-- this is another oneline comment -->
+   <logger name="farnetto">
+      <level value="WARN"/>
+   </logger>
+
+   <!-- ====================================================================
+        This is the root logger.
+        ==================================================================== -->
+   <root>
+      <level value="INFO"/>
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="APPLICATION"/>
+   </root>
+   
+</log4j:configuration>

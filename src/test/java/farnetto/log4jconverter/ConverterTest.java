@@ -145,4 +145,10 @@ public class ConverterTest
             fail(e.toString());
         }
     }
+
+    @Test
+    public void appenderThreshold()
+    {
+        convertAndCompare("appenderThreshold.xml");
+    }
 }
