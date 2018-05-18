@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+############################################################################
+##
+##  This is the log configuration for production.
+##
+############################################################################
+-->
+<Configuration status="debug">
+
+    <Appenders>
+    
+        <!-- ====================================================================
+             application log
+             ==================================================================== -->
+        <RollingFile name="APPLICATION" fileName="logs/app.log">
+            <PatternLayout pattern="%5p [%t] (%F:%L) - %m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="75MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="3"/>
+        </RollingFile>
+        
+        <File name="FOO" fileName="logs/foo.log" append="false">
+            <PatternLayout pattern="%m%n"/>
+        </File>
+        
+        <!-- ====================================================================
+             console log
+             ==================================================================== -->
+        <Console name="CONSOLE" target="STDOUT">
+            <PatternLayout pattern="%p %t %c - %m%n"/>
+        </Console>
+        
+    </Appenders>
+    
+    <Loggers>
+    
+        <!-- this is the logger for the converter package -->
+        <Logger name="farnetto.log4jconverter" level="DEBUG" additivity="false">
+            <AppenderRef ref="APPLICATION"/>
+        </Logger>
+        
+        <!-- this is another oneline comment -->
+        <Logger name="farnetto" level="WARN">
+        </Logger>
+        
+        <!-- ====================================================================
+             This is the root logger.
+             ==================================================================== -->
+        <Root level="root.level">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="APPLICATION"/>
+        </Root>      
+    
+    </Loggers>
+    
+</Configuration>
