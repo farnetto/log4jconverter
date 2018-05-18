@@ -22,6 +22,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.sax.SAXSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -37,6 +39,8 @@ import freemarker.template.Version;
  */
 public class Converter
 {
+    private static final Logger LOG = LogManager.getLogger(Converter.class);
+
     private static final String FREEMARKER_VERSION = "2.3.28";
 
     private static final String EOL = System.getProperty("line.separator");
@@ -63,7 +67,7 @@ public class Converter
 
         Map<String,String> comments = parseComments(log4jInput);
 
-        System.out.println(comments);
+        LOG.debug(comments);
 
         parseXml(log4jInput, log4j2Output, comments);
     }
