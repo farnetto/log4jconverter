@@ -157,8 +157,9 @@ public class Converter
                             line = lines.get(i);
                             if (line.contains("name=") || line.contains(CONFIG_TAG) || line.contains("root"))
                             {
+                                String formattedComment = insertTabs(aComment.toString(), !line.contains(CONFIG_TAG));
                                 String key = parseName(line);
-                                comments.put(key, aComment.toString());
+                                comments.put(key, formattedComment);
                                 aComment.setLength(0);
                                 break;
                             }
@@ -176,6 +177,22 @@ public class Converter
             throw new ConverterException("Can not process file " + log4jInput, e1);
         }
         return comments;
+    }
+
+    /**
+     * Indents a multiline comment.
+     * 
+     * @param comment the full possibly multiline comment
+     * @param indent if tabs should be inserted
+     * @return the comment with tabs inserted after linebreaks
+     */
+    private String insertTabs(String comment, boolean indent)
+    {
+        if (!indent)
+        {
+            return comment;
+        }
+        return comment.replace(EOL + "    ", EOL + "         ");
     }
 
     private boolean hasTag(String line)
