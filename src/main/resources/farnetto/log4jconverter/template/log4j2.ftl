@@ -63,7 +63,7 @@ ${comments.log4jconfiguration}
         
       </#list>
         ${comments.root!}
-        <Root level="root.level">
+        <Root level="${root.priorityOrLevel?first.value}">
           <#list root.appenderRef as appender>
             <AppenderRef ref="${appender.ref}"/>
           </#list>

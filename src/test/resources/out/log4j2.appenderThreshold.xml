@@ -48,7 +48,7 @@
         <!-- ====================================================================
              This is the root logger.
              ==================================================================== -->
-        <Root level="root.level">
+        <Root level="INFO">
             <AppenderRef ref="CONSOLE"/>
             <AppenderRef ref="APPLICATION"/>
         </Root>      
