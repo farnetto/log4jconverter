@@ -21,6 +21,11 @@
             <DefaultRolloverStrategy max="3"/>
         </RollingFile>
         
+        <!-- RollingFileAppender with default parameters -->
+        <RollingFile name="A2" fileName="logs/app.log">
+            <PatternLayout pattern="%5p [%t] (%F:%L) - %m%n"/>
+        </RollingFile>
+        
         <File name="FOO" fileName="logs/foo.log" append="false">
             <PatternLayout pattern="%m%n"/>
         </File>
@@ -31,6 +36,17 @@
         <Console name="CONSOLE" target="STDOUT">
             <PatternLayout pattern="%p %t %c - %m%n"/>
         </Console>
+        
+        <!-- console log to stderr -->
+        <Console name="C2" target="STDERR">
+            <PatternLayout pattern="%p %t %c - %m%n"/>
+        </Console>
+        
+        <!-- custom appender -->
+        <CustomAppender name="CUSTOM">
+            <Param name="p1" value="v1"/>
+            <Param name="p2" value="v2"/>
+        </CustomAppender>
         
     </Appenders>
     

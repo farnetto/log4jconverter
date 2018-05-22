@@ -22,6 +22,15 @@
       </layout>
    </appender>
    
+   <!-- RollingFileAppender with default parameters -->
+   <appender name="A2" class="org.apache.log4j.RollingFileAppender">
+      <param name="File" value="logs/app.log"/>
+      <param name="Append" value="true"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%5p [%t] (%F:%L) - %m%n"/>
+      </layout>
+   </appender>
+   
    <appender name="FOO" class="org.apache.log4j.FileAppender">
       <param name="File" value="logs/foo.log"/>
       <param name="Append" value="false"/>
@@ -38,7 +47,21 @@
          <param name="ConversionPattern" value="%p %t %c - %m%n"/>
       </layout>
    </appender>
+   
+   <!-- console log to stderr -->
+   <appender name="C2" class="org.apache.log4j.ConsoleAppender">
+      <param name="Target" value="STDERR"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%p %t %c - %m%n"/>
+      </layout>
+   </appender>
 
+   <!-- custom appender -->
+   <appender name="CUSTOM" class="farnetto.CustomAppender">
+      <param name="p1" value="v1"/>
+      <param name="p2" value="v2"/>
+   </appender>
+   
    <!-- this is the logger for the converter package -->
    <logger name="farnetto.log4jconverter" additivity="false">
       <level value="DEBUG"/>

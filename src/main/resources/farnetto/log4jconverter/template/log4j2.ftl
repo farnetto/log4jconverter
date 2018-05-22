@@ -10,12 +10,6 @@ ${comments.log4jconfiguration}
           <#if param.name == "File">
             <#assign fileName=param.value>
           </#if>
-          <#if param.name == "MaxFileSize">
-            <#assign maxFileSize=param.value>
-          </#if>
-          <#if param.name == "MaxBackupIndex">
-            <#assign maxBackupIndex=param.value>
-          </#if>
           <#if param.name == "Append">
             <#assign append=param.value>
           </#if>
@@ -23,14 +17,11 @@ ${comments.log4jconfiguration}
         <#if appender.clazz == "org.apache.log4j.RollingFileAppender">
         <RollingFile name="${appender.name}" fileName="${fileName}">
             <PatternLayout pattern="${appender.layout.param?first.value}"/>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="${maxFileSize}"/>
-            </Policies>
-            <DefaultRolloverStrategy max="${maxBackupIndex}"/>
+            <@maxfilesize appender/>
+            <@maxbackupindex appender/>
         </RollingFile>
         
-        </#if>
-        <#if appender.clazz == "org.apache.log4j.FileAppender">
+        <#elseif appender.clazz == "org.apache.log4j.FileAppender">
         <File name="${appender.name}" fileName="${fileName}" append="${append}">
             <PatternLayout pattern="${appender.layout.param?first.value}"/>
             <#list appender.param as p>
@@ -40,11 +31,22 @@ ${comments.log4jconfiguration}
             </#list>
         </File>
         
-        </#if>
-        <#if appender.clazz == "org.apache.log4j.ConsoleAppender">
-        <Console name="${appender.name}" target="STDOUT">
+        <#elseif appender.clazz == "org.apache.log4j.ConsoleAppender">
+        <Console name="${appender.name}" target="<@consoletarget appender/>">
             <PatternLayout pattern="${appender.layout.param?first.value}"/>
+            <#list appender.param as p>
+                <#if p.name == "Threshold">
+            <Filter type="ThresholdFilter" level="${p.value}"/>
+                </#if>
+            </#list>
         </Console>
+        
+        <#else>
+        <${appender.clazz?keep_after_last(".")} name="${appender.name}">
+          <#list appender.param as p>
+            <Param name="${p.name}" value="${p.value}"/>
+          </#list>
+        </${appender.clazz?keep_after_last(".")}>
         
         </#if>
       </#list>
@@ -72,3 +74,27 @@ ${comments.log4jconfiguration}
     </Loggers>
     
 </Configuration>
+<#macro consoletarget appender>
+  <#assign target = "STDOUT">
+  <#list appender.param as p>
+    <#if p.name == "Target">
+      <#assign target = p.value>
+    </#if>
+  </#list>
+${target}</#macro>
+<#macro maxfilesize appender>
+  <#list appender.param as p>
+    <#if p.name == "MaxFileSize">
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${p.value}"/>
+            </Policies>
+    </#if>
+  </#list>
+</#macro>
+<#macro maxbackupindex appender>
+  <#list appender.param as p>
+    <#if p.name == "MaxBackupIndex">
+            <DefaultRolloverStrategy max="${p.value}"/>    
+    </#if>
+  </#list>
+</#macro>
