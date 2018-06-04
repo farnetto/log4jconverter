@@ -29,7 +29,7 @@
         <!-- ====================================================================
              console log
              ==================================================================== -->
-        <Console name="CONSOLE" target="STDOUT">
+        <Console name="CONSOLE">
             <PatternLayout pattern="%p %t %c - %m%n"/>
         </Console>
         

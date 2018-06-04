@@ -33,22 +33,17 @@
         <!-- ====================================================================
              console log
              ==================================================================== -->
-        <Console name="CONSOLE" target="STDOUT">
+        <Console name="CONSOLE">
             <PatternLayout pattern="%p %t %c - %m%n"/>
         </Console>
         
         <!-- console log to stderr -->
-        <Console name="C2" target="STDERR">
+        <Console name="C2" target="SYSTEM_ERR">
             <PatternLayout pattern="%p %t %c - %m%n"/>
         </Console>
         
         <!-- does System.out get converted to STDOUT? -->
-        <Console name="C3" target="STDOUT">
-            <PatternLayout pattern="%p %t %c - %m%n"/>
-        </Console>
-        
-        <!-- does System.err get converted to STDERR? -->
-        <Console name="C4" target="STDERR">
+        <Console name="C3">
             <PatternLayout pattern="%p %t %c - %m%n"/>
         </Console>
         

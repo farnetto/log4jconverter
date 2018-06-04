@@ -32,7 +32,7 @@ ${comments.log4jconfiguration}
         </File>
         
         <#elseif appender.clazz == "org.apache.log4j.ConsoleAppender">
-        <Console name="${appender.name}" target="<@consoletarget appender/>">
+        <Console name="${appender.name}"<@consoletarget appender/>>
             <PatternLayout pattern="${appender.layout.param?first.value}"/>
             <#list appender.param as p>
                 <#if p.name == "Threshold">
@@ -75,17 +75,17 @@ ${comments.log4jconfiguration}
     
 </Configuration>
 <#macro consoletarget appender>
-  <#assign target = "STDOUT">
+  <#assign target = "">
   <#list appender.param as p>
     <#if p.name == "Target">
       <#assign target = p.value>
     </#if>
   </#list>
   <#if target == "System.out">
-    <#assign target = "STDOUT">
+    <#assign target = "">
   </#if>
-  <#if target == "System.err">
-    <#assign target = "STDERR">
+  <#if target == "System.err" || target == "STDERR">
+    <#assign target = " target=\"SYSTEM_ERR\"">
   </#if>
 ${target}</#macro>
 <#macro maxfilesize appender>
