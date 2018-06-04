@@ -42,6 +42,16 @@
             <PatternLayout pattern="%p %t %c - %m%n"/>
         </Console>
         
+        <!-- does System.out get converted to STDOUT? -->
+        <Console name="C3" target="STDOUT">
+            <PatternLayout pattern="%p %t %c - %m%n"/>
+        </Console>
+        
+        <!-- does System.err get converted to STDERR? -->
+        <Console name="C4" target="STDERR">
+            <PatternLayout pattern="%p %t %c - %m%n"/>
+        </Console>
+        
         <!-- custom appender -->
         <CustomAppender name="CUSTOM">
             <Param name="p1" value="v1"/>

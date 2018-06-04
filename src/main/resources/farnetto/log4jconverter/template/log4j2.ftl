@@ -81,6 +81,12 @@ ${comments.log4jconfiguration}
       <#assign target = p.value>
     </#if>
   </#list>
+  <#if target == "System.out">
+    <#assign target = "STDOUT">
+  </#if>
+  <#if target == "System.err">
+    <#assign target = "STDERR">
+  </#if>
 ${target}</#macro>
 <#macro maxfilesize appender>
   <#list appender.param as p>
