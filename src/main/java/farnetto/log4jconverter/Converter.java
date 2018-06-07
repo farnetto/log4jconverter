@@ -3,12 +3,14 @@ package farnetto.log4jconverter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +55,33 @@ public class Converter
 
     public static void main(String[] args) throws FileNotFoundException
     {
-        new Converter().convert(new File(args[0]), System.out);
+        boolean inPlace = false;
+        if (args.length > 0 && args[0].equals("-i"))
+        {
+            // inplace
+            inPlace = true;
+            // shift
+            args = Arrays.<String>copyOfRange(args, 1, args.length);
+        }
+        if (args.length == 0)
+        {
+            System.err.println("input file must be specified");
+            System.exit(1);
+        }
+        String fileName = args[0];
+        File in = new File(fileName);
+        if (!in.isFile())
+        {
+            System.err.println("input must be a file");
+            System.exit(1);
+        }
+        OutputStream out = System.out;
+        if (inPlace)
+        {
+            String outFileName = fileName.replaceAll("log4j", "log4j2");
+            out = new FileOutputStream(outFileName);
+        }
+        new Converter().convert(in, out);
     }
 
     /**

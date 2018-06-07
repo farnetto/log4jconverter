@@ -15,7 +15,7 @@ ${comments.log4jconfiguration}
           </#if>
         </#list>
         <#if appender.clazz == "org.apache.log4j.RollingFileAppender">
-        <RollingFile name="${appender.name}" fileName="${fileName}">
+        <RollingFile name="${appender.name}" fileName="${fileName}" filePattern="${fileName?replace('.log', '-%i.log')}">
             <PatternLayout pattern="${appender.layout.param?first.value}"/>
             <@maxfilesize appender/>
             <@maxbackupindex appender/>
