@@ -26,7 +26,7 @@ ${comments.log4jconfiguration}
             <PatternLayout pattern="${appender.layout.param?first.value}"/>
             <#list appender.param as p>
                 <#if p.name == "Threshold">
-            <Filter type="ThresholdFilter" level="${p.value}"/>
+            <ThresholdFilter level="${p.value}"/>
                 </#if>
             </#list>
         </File>

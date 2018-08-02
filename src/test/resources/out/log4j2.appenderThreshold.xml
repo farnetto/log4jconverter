@@ -23,7 +23,7 @@
         
         <File name="FOO" fileName="logs/foo.log" append="false">
             <PatternLayout pattern="%m%n"/>
-            <Filter type="ThresholdFilter" level="ERROR"/>
+            <ThresholdFilter level="ERROR"/>
         </File>
         
         <!-- ====================================================================

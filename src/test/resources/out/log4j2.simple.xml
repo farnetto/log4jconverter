@@ -28,6 +28,7 @@
         
         <File name="FOO" fileName="logs/foo.log" append="false">
             <PatternLayout pattern="%m%n"/>
+            <ThresholdFilter level="INFO"/>
         </File>
         
         <!-- ====================================================================
