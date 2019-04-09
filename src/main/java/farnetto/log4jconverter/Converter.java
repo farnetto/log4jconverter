@@ -96,6 +96,7 @@ public class Converter
         }
 
         Map<String,String> comments = parseComments(log4jInput);
+        comments.putIfAbsent("log4jconfiguration", "");
 
         LOG.debug(comments);
 

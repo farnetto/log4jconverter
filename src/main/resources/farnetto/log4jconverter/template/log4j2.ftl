@@ -7,10 +7,10 @@ ${comments.log4jconfiguration}
       <#list appenders as appender>
         ${comments[appender.name]!}
         <#list appender.param as param>
-          <#if param.name == "File">
+          <#if param.name?matches("file", "i") >
             <#assign fileName=param.value>
           </#if>
-          <#if param.name == "Append">
+          <#if param.name?matches("append", "i") >
             <#assign append=param.value>
           </#if>
         </#list>
