@@ -7,3 +7,4 @@ scratch.txt
 __setup_env.bat
 *.bak
 log4jconverter.jar
+nbactions.xml
