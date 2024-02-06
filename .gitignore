@@ -4,3 +4,7 @@
 target
 scratch.txt
 .factorypath
+__setup_env.bat
+*.bak
+log4jconverter.jar
+nbactions.xml

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-${comments.log4jconfiguration}
+${comments["log4jconfiguration"]!""}
 <Configuration status="${statusLevel}">
 
     <Appenders>
@@ -55,7 +55,8 @@ ${comments.log4jconfiguration}
     <Loggers>
       <#list loggers as logger>
         ${comments[logger.name]!}
-        <Logger name="${logger.name}"<#if logger.level??> level="${logger.level.value}"</#if><#if !logger.additivity?boolean> additivity="${logger.additivity}"</#if><#if (logger.appenderRef?size == 0)>/</#if>>
+        <Logger name="${logger.name}"<#if logger.level??>
+                level="${logger.level.value}"</#if><#if !logger.additivity?boolean> additivity="${logger.additivity}"</#if><#if (logger.appenderRef?size == 0)>/</#if>>
           <#if (logger.appenderRef?size > 0)>
             <#list logger.appenderRef as appender>
             <AppenderRef ref="${appender.ref}"/>
@@ -65,7 +66,8 @@ ${comments.log4jconfiguration}
         
       </#list>
         ${comments.root!}
-        <Root level="${root.priorityOrLevel?first.value}">
+        <Root
+            level="${root.priorityOrLevel?first.value}">
           <#list root.appenderRef as appender>
             <AppenderRef ref="${appender.ref}"/>
           </#list>

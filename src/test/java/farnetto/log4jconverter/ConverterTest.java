@@ -103,7 +103,7 @@ public class ConverterTest
             {
                 String expectedLine = expectedOutLines.get(idx).trim();
                 String actualLine = actualOutLines.get(idx).trim();
-                assertEquals("at line " + idx, expectedLine, actualLine);
+                assertEquals(expectedOutputFileName + " at line " + idx, expectedLine, actualLine);
             }
         }
         catch (URISyntaxException | IOException e)
