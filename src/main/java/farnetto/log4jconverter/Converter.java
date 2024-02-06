@@ -78,7 +78,7 @@ public class Converter
         OutputStream out = System.out;
         if (inPlace)
         {
-            String outFileName = fileName.replaceAll("log4j", "log4j2");
+            String outFileName = fileName.replaceAll("log4j.xml", "log4j2.xml");
             out = new FileOutputStream(outFileName);
         }
         new Converter().convert(in, out);

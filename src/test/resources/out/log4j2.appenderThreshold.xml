@@ -38,17 +38,20 @@
     <Loggers>
     
         <!-- this is the logger for the converter package -->
-        <Logger name="farnetto.log4jconverter" level="DEBUG" additivity="false">
+        <Logger name="farnetto.log4jconverter"
+				level="DEBUG" additivity="false">
             <AppenderRef ref="APPLICATION"/>
         </Logger>
         
         <!-- this is another oneline comment -->
-        <Logger name="farnetto" level="WARN"/>
+        <Logger name="farnetto"
+				level="WARN"/>
         
         <!-- ====================================================================
              This is the root logger.
              ==================================================================== -->
-        <Root level="INFO">
+        <Root
+			level="INFO">
             <AppenderRef ref="CONSOLE"/>
             <AppenderRef ref="APPLICATION"/>
         </Root>      
